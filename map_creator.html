@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Soko Map Creator</title>
+    <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+    
+    <style>
+			
+		#panel {
+			float:right;
+		}
+		
+		table {
+			background:#CCC;
+			border:1px solid #000;
+		}
+		table td {
+			padding:15px;
+			border:1px solid #DDD;
+			height: 16px;
+			width: 16px;
+		
+		}
+		
+		
+    </style>
+</head>
+
+<body>
+
+<div id="panel">
+	<button id="boxSelect">Box</button>
+	<button id="playerSelect">Player</button>
+	<button id="wallSelect">Wall</button>
+	<button id="targetSelect">Target</button>
+	<button id="emptySelect">Empty</button>
+</div>
+
+<div id="map">
+
+</div>
+
+
+<script>
+	
+	//set wall as the default item
+	var item = "wall";
+	
+	$(document).ready(function() {
+		$('#map').append('<table></table>');
+		var table = $('#map').children();  
+		for(var i = 0; i < 16; i++) {
+			  table.append("<tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>");
+		}
+		
+		//handling clicks
+		$('#map').on('click', 'td', function() {
+				switch(item) {
+					case "player" :
+						$(this).css('background-image', 'url(img/player.png');
+						break;
+					case "wall" :
+						$(this).css('background-image', 'url(img/wall.png');
+						break;
+					case "box" :
+						$(this).css('background-image', 'url(img/crate.png');
+						break;
+					case "target" :
+						$(this).css('background-image', 'url(img/target.png');
+						break;
+					case "empty" :
+						//remove the background
+						$(this).css('background-image', 'none');	
+						break;
+
+				}
+			
+		});
+		
+		//triggered by the left side panel buttons
+		//changing the selected item
+		$('#boxSelect').click(function() {
+			item = "box";
+		});
+		$('#playerSelect').click(function() {
+			item = "player";
+		});
+		$('#wallSelect').click(function() {
+			item = "wall";
+		});
+		$('#targetSelect').click(function() {
+			item = "target";
+		});
+		$('#emptySelect').click(function() {
+			item = "empty";
+		});
+		
+
+	});
+
+
+
+</script>
+</body>
+</html>
