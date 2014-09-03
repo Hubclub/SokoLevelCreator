@@ -22,6 +22,12 @@
 		
 		}
 		
+		#result {
+			height:440px;
+			width:215px;
+		    overflow-y:auto;
+		}
+		
 		
     </style>
 </head>
@@ -34,7 +40,12 @@
 	<button id="wallSelect">Wall</button>
 	<button id="targetSelect">Target</button>
 	<button id="emptySelect">Empty</button>
+	
+	<div id="result">
+	
+	</div>
 </div>
+
 
 <div id="map">
 
@@ -42,6 +53,13 @@
 
 
 <script>
+	
+	//object arrays
+	var boxes = [];
+	var players = [];
+	var bricks = []; 
+	var targets = [];
+	
 	
 	//set wall as the default item
 	var item = "wall";
@@ -55,25 +73,94 @@
 		
 		//handling clicks
 		$('#map').on('click', 'td', function() {
+			
+			
+			//calculate the coordinates to be like LibGDX
+			var x = $(this).index(); 
+			var y = $(this).index(); 
+			y = Math.abs($(this).parent().index()-15);
+						
 				switch(item) {
 					case "player" :
 						$(this).css('background-image', 'url(img/player.png');
+						//insert the position into the array
+						var player = new Object();
+						player.x = x;
+						player.y = y;
+						players.push(player);
+						
 						break;
+						
 					case "wall" :
 						$(this).css('background-image', 'url(img/wall.png');
+						var brick = new Object();
+						brick.x = x;
+						brick.y = y;
+						bricks.push(brick);
+						
 						break;
+						
 					case "box" :
 						$(this).css('background-image', 'url(img/crate.png');
+						var box = new Object();
+						box.x = x;
+						box.y = y;
+						boxes.push(box);
+						
 						break;
+						
 					case "target" :
 						$(this).css('background-image', 'url(img/target.png');
+						var target = new Object();
+						target.x = x;
+						target.y = y;
+						targets.push(target);
+						
 						break;
+						
 					case "empty" :
 						//remove the background
-						$(this).css('background-image', 'none');	
+						$(this).css('background-image', 'none');
+						
+						//remove the background from its array
+						//but first, search all the arrays to see where is the object
+						for(var i=0; i<bricks.length; i++) {
+							if(bricks[i].x == x && bricks[i].y == y) {
+								bricks.splice(i,1);
+								break;
+							}
+										
+						};
+						
+						for(var i=0; i<players.length; i++) {
+							if(players[i].x == x && players[i].y == y) {
+								players.splice(i,1);
+								break;
+							}
+										
+						};
+						
+						for(var i=0; i<boxes.length; i++) {
+							if(boxes[i].x == x && boxes[i].y == y) {
+								boxes.splice(i,1);
+								break;
+							}
+										
+						};
+						
+						for(var i=0; i<targets.length; i++) {
+							if(targets[i].x == x && targets[i].y == y) {
+								targets.splice(i,1);
+								break;
+							}
+										
+						};
+						
 						break;
 
 				}
+				
+				updateMap(); //updates the result panel
 			
 		});
 		
@@ -97,6 +184,29 @@
 		
 
 	});
+	
+	function updateMap() {
+		//clears previous data
+		$("#result").empty();
+		
+		//display player position
+		for(var prop in players) {
+			$("#result").append("<ul> 0 " + players[prop].x + " " + players[prop].y + "</ul>"); //0 means player
+		}
+		//display wall segments positions
+		for(var prop in bricks) {
+			$("#result").append("<ul> 1 " + bricks[prop].x + " " + bricks[prop].y + "</ul>"); //1 means wall
+		}
+		//display boxes positions
+		for(var prop in boxes) {
+			$("#result").append("<ul> 2 " + boxes[prop].x + " " + boxes[prop].y + "</ul>"); //2 means box
+		}
+		//display targets positions
+		for(var prop in targets) {
+			$("#result").append("<ul> 3 " + targets[prop].x + " " + targets[prop].y + "</ul>");	//3 means target
+		}
+		
+	}
 
 
 
